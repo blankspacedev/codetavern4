@@ -1,1 +1,64 @@
 {% extends "base.html" %}
+{% block page_content %}
+
+<form method="POST" enctype=multipart/form-data id="form_speechapi">
+  <div class="row">
+    <div class="col-xs-4">
+      <input name="speechapi_audio"type="file" accept="audio/*" capture="microphone" onchange="send_audio();"/>
+    </div>
+    <div class="col-xs-4">
+      <label>Idioma del audio: </label>
+      <select name="inputlanguage">
+        {% for lang in languages|sort %}
+          <option {% if lang==input_selected_lang %}selected{% endif %}>{{lang}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-xs-4">
+      <label>Idioma a traducir: </label>
+      <select name="targetlanguage">
+        {% for lang in languages|sort %}
+          <option {% if lang==output_selected_lang %}selected{% endif %}>{{lang}}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+</form>
+
+{% if processed_audio %}
+<div>
+  <div class="row">
+    <div class="col-xs-12">
+      <audio autoplay="autoplay" controls="controls">
+          <source src="data:audio/{{processed_audio['fileext']}};base64,{{processed_audio['audio']}}"/>
+      </audio>
+    </div>
+  </div>
+
+  <hr>
+
+  {% if processed_audio['translatedText'] %}
+  <div class="row">
+    <div class="col-xs-6 column-content">
+      <div class="bounding-box">
+        <label>Texto original:</label>
+        {% for text in processed_audio['inputText'] %}
+        <p>{{text}}</p>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="col-xs-6">
+      <div class="bounding-box">
+        <label>Texto traducido:</label>
+        {% for text in processed_audio['translatedText'] %}
+        <p>{{text|safe}}</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+{% endif %}
+
+{% endblock %}

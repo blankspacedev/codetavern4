@@ -1,1 +1,65 @@
 {% extends "base.html" %}
+{% block page_content %}
+
+<form method="POST" enctype=multipart/form-data id="form_visionapi">
+  <div class="row">
+    <div class="col-xs-6">
+      <input name="visionapi_image" type="file" accept="image/*" capture="camera" onchange="send_image();"/>
+    </div>
+    <div class="col-xs-6">
+      <label>Elige tu idioma: </label>
+      <select name="language">
+        {% for lang in languages|sort %}
+          <option {% if lang==selected_lang %}selected{% endif %}>{{lang}}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+</form>
+
+{% if processed_picture %}
+<div>
+  <div class="row">
+    <div class="col-xs-6 column-content">
+      <img src="data:image;base64,{{processed_picture['image']}}" width="100%"/ >
+    </div>
+    <div class="col-xs-6">
+      <div class="row">
+        {% if processed_picture["labelsList"]|length > 0 %}
+        <ul>
+          {% for label in processed_picture["labelsList"] %}
+            <li>{{label[0]}} ({{label[1]}})</li>
+          {% endfor %}
+        {% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  {% if processed_picture['translatedTextList'] %}
+  <div class="row">
+    <div class="col-xs-6 column-content">
+      <div class="bounding-box">
+        <label>Texto original:</label>
+        {% for text in processed_picture['inputTextList'] %}
+        <p>{{text}}</p>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="col-xs-6">
+      <div class="bounding-box">
+        <label>Texto traducido:</label>
+        {% for text in processed_picture['translatedTextList'] %}
+        <p>{{text|safe}}</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+{% endif %}
+
+{% endblock %}
