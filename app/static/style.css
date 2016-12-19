@@ -1,0 +1,12 @@
+.bounding-box {
+  background-color: #d0d0d0;
+  padding: 5px;
+}
+
+.column-content {
+  border-right: 1px dashed black;
+}
+
+input[type='file'] {
+  color: transparent;
+}

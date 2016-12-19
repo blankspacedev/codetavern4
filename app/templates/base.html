@@ -1,0 +1,33 @@
+{% extends "bootstrap/base.html" %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" type="text/css" href={{url_for('static',filename='style.css')}}>
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+<script src="{{url_for('static', filename='script.js')}}"></script>
+{% endblock %}
+
+}
+
+{% block navbar %}
+<div class="navbar navbar-inverse" role="navigation">
+  <div class="container">
+    <div class="navbar header">
+      <div class="row">
+        <a class="navbar-brand" {% if request == 'visionapi' %}style="color:white"{% endif %} href="/visionapi">Cloud Vision API</a>
+        <a class="navbar-brand" {% if request == 'speechapi' %}style="color:white"{% endif %} href="/speechapi">Cloud Speech API</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+  {% block page_content %}{% endblock %}
+</div>
+{% endblock %}
